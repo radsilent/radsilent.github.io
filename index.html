@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Matthew Collaro — Systems Engineer &amp; Software Developer</title>
+<meta name="description" content="Matthew Collaro is a systems engineer and software developer working on model-based systems engineering, requirements traceability, and verification tooling for safety-critical programs." />
+<meta name="robots" content="index,follow,max-image-preview:large" />
+<link rel="canonical" href="https://radsilent.github.io/" />
+
+<meta property="og:type" content="profile" />
+<meta property="og:title" content="Matthew Collaro — Systems Engineer &amp; Software Developer" />
+<meta property="og:description" content="Systems engineer and software developer working on model-based systems engineering, requirements traceability, and verification tooling." />
+<meta property="og:url" content="https://radsilent.github.io/" />
+<meta property="profile:first_name" content="Matthew" />
+<meta property="profile:last_name" content="Collaro" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Matthew Collaro — Systems Engineer &amp; Software Developer" />
+<meta name="twitter:description" content="Systems engineer and software developer working on model-based systems engineering and verification tooling." />
+
+<link rel="stylesheet" href="style.css" />
+
+<!--
+  Person schema. This is the single most important block on the page: it tells
+  Google that this URL is the canonical description of the entity "Matthew Collaro"
+  and, via sameAs, which other profiles belong to the same person.
+  Fill in every sameAs URL as you claim each profile. Remove the ones you skip —
+  a sameAs pointing at a 404 is worse than no sameAs at all.
+-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "https://radsilent.github.io/#matthew-collaro",
+  "name": "Matthew Collaro",
+  "givenName": "Matthew",
+  "familyName": "Collaro",
+  "url": "https://radsilent.github.io/",
+  "jobTitle": "Systems Engineer and Software Developer",
+  "description": "Systems engineer and software developer working on model-based systems engineering, requirements traceability, and verification tooling for safety-critical programs.",
+  "knowsAbout": [
+    "Model-based systems engineering",
+    "Requirements engineering",
+    "Requirements traceability",
+    "Verification and validation",
+    "Software architecture",
+    "Rust",
+    "Systems modeling"
+  ],
+  "sameAs": [
+    "https://github.com/radsilent"
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="masthead">
+  <h1>Matthew Collaro</h1>
+  <p class="tagline">Systems engineer and software developer.</p>
+</header>
+
+<main>
+
+  <section id="about">
+    <h2>About</h2>
+    <p>
+      I'm Matthew Collaro, a systems engineer and software developer. My work sits at the
+      seam where engineering programs usually break: between the model and the specification,
+      between the specification and the test, and between the test and the evidence that the
+      test actually proved something.
+    </p>
+    <p>
+      Most of what I build is tooling for that problem — software that keeps requirements,
+      architecture decisions, and verification results linked to each other as a program
+      changes, instead of letting them drift apart over months until nobody can say which
+      requirement a given design decision was meant to satisfy.
+    </p>
+    <p>
+      The through-line in my work is a conviction that traceability shouldn't be a
+      documentation task. On most programs it's treated as one: engineers do the real
+      work in their models and their test benches, and then somebody reconstructs the
+      links afterward, from memory, under deadline. That reconstruction is where the
+      errors get in, and it's why a requirement can sit unsatisfied for two review
+      cycles before anyone notices.
+    </p>
+    <p>
+      I'd rather the links be a side effect of the engineering itself — captured when
+      the decision is made, checked continuously, and surfaced the moment they break.
+      That's the problem I've spent my time on, and most of what I've built is some
+      attempt at it.
+    </p>
+  </section>
+
+  <section id="work">
+    <h2>What I work on</h2>
+
+    <article class="entry">
+      <h3>Model-based systems engineering tooling</h3>
+      <p>
+        Requirements management on large programs is still largely a document problem
+        pretending to be an engineering problem. A requirement gets written in one tool,
+        modeled in a second, tested in a third, and the links between those three are
+        maintained by hand in a spreadsheet — until they aren't.
+      </p>
+      <p>
+        I build software that treats those links as first-class data: a governed graph
+        where a change to a requirement propagates to the architecture elements that
+        implement it and the verification artifacts that close it out, so the traceability
+        is a byproduct of doing the work rather than a separate documentation exercise
+        performed after the fact.
+      </p>
+    </article>
+
+    <article class="entry">
+      <h3>Continuous verification</h3>
+      <p>
+        Verification is usually treated as a phase — something that happens near the end,
+        against a baseline that has already moved. I'm interested in the alternative:
+        verification that runs continuously against the current state of the design, so
+        that a broken trace or an unsatisfied requirement surfaces the day it breaks
+        rather than at a review months later.
+      </p>
+    </article>
+
+    <article class="entry">
+      <h3>Open source</h3>
+      <p>
+        I develop in the open where I can. My code is at
+        <a href="https://github.com/radsilent" rel="me">github.com/radsilent</a>.
+      </p>
+    </article>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>
+      The best way to reach me is by email:
+      <a href="mailto:streamline@vectorstreamsystems.com">streamline@vectorstreamsystems.com</a>.
+    </p>
+    <ul class="profiles">
+      <li><a href="https://github.com/radsilent" rel="me">GitHub</a></li>
+      <!-- Add each profile here as you create it, and mirror it into the
+           sameAs array in the JSON-LD block above. rel="me" is what lets
+           search engines treat these as identity claims rather than plain links. -->
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <p>&copy; 2026 Matthew Collaro</p>
+</footer>
+
+</body>
+</html>
