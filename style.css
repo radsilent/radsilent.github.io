@@ -94,3 +94,16 @@ footer {
   color: var(--muted);
   font-size: 0.9rem;
 }
+
+.meta {
+  margin: -0.35rem 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+ul:not(.profiles) {
+  margin: 0 0 1.1rem;
+  padding-left: 1.25rem;
+}
+
+ul:not(.profiles) li { margin-bottom: 0.5rem; }

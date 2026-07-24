@@ -3,30 +3,23 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Matthew Collaro — Systems Engineer &amp; Software Developer</title>
-<meta name="description" content="Matthew Collaro is a systems engineer and software developer working on model-based systems engineering, requirements traceability, and verification tooling for safety-critical programs." />
+<title>Matthew Collaro — Systems Engineer</title>
+<meta name="description" content="Matthew Collaro is a senior systems engineer working in model-based systems engineering, requirements traceability, and vehicle and aircraft systems architecture." />
 <meta name="robots" content="index,follow,max-image-preview:large" />
 <link rel="canonical" href="https://radsilent.github.io/" />
 
 <meta property="og:type" content="profile" />
-<meta property="og:title" content="Matthew Collaro — Systems Engineer &amp; Software Developer" />
-<meta property="og:description" content="Systems engineer and software developer working on model-based systems engineering, requirements traceability, and verification tooling." />
+<meta property="og:title" content="Matthew Collaro — Systems Engineer" />
+<meta property="og:description" content="Senior systems engineer working in model-based systems engineering, requirements traceability, and systems architecture." />
 <meta property="og:url" content="https://radsilent.github.io/" />
 <meta property="profile:first_name" content="Matthew" />
 <meta property="profile:last_name" content="Collaro" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="Matthew Collaro — Systems Engineer &amp; Software Developer" />
-<meta name="twitter:description" content="Systems engineer and software developer working on model-based systems engineering and verification tooling." />
+<meta name="twitter:title" content="Matthew Collaro — Systems Engineer" />
+<meta name="twitter:description" content="Senior systems engineer working in model-based systems engineering and requirements traceability." />
 
 <link rel="stylesheet" href="style.css" />
 
-<!--
-  Person schema. This is the single most important block on the page: it tells
-  Google that this URL is the canonical description of the entity "Matthew Collaro"
-  and, via sameAs, which other profiles belong to the same person.
-  Fill in every sameAs URL as you claim each profile. Remove the ones you skip —
-  a sameAs pointing at a 404 is worse than no sameAs at all.
--->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -36,18 +29,32 @@
   "givenName": "Matthew",
   "familyName": "Collaro",
   "url": "https://radsilent.github.io/",
-  "jobTitle": "Systems Engineer and Software Developer",
-  "description": "Systems engineer and software developer working on model-based systems engineering, requirements traceability, and verification tooling for safety-critical programs.",
+  "email": "mailto:streamline@vectorstreamsystems.com",
+  "jobTitle": "Senior Systems Engineer",
+  "description": "Senior systems engineer working in model-based systems engineering, requirements traceability, and systems architecture for automotive and aerospace programs.",
+  "alumniOf": [
+    {
+      "@type": "CollegeOrUniversity",
+      "name": "University of South Florida"
+    },
+    {
+      "@type": "CollegeOrUniversity",
+      "name": "Georgia Institute of Technology"
+    }
+  ],
   "knowsAbout": [
     "Model-based systems engineering",
+    "SysML",
     "Requirements engineering",
     "Requirements traceability",
+    "Systems architecture",
     "Verification and validation",
-    "Software architecture",
+    "Embedded systems",
     "Rust",
-    "Systems modeling"
+    "Python"
   ],
   "sameAs": [
+    "https://www.linkedin.com/in/mattcollaro/",
     "https://github.com/radsilent"
   ]
 }
@@ -57,7 +64,7 @@
 
 <header class="masthead">
   <h1>Matthew Collaro</h1>
-  <p class="tagline">Systems engineer and software developer.</p>
+  <p class="tagline">Systems engineer. Model-based systems engineering, requirements traceability, and systems architecture.</p>
 </header>
 
 <main>
@@ -65,71 +72,147 @@
   <section id="about">
     <h2>About</h2>
     <p>
-      I'm Matthew Collaro, a systems engineer and software developer. My work sits at the
-      seam where engineering programs usually break: between the model and the specification,
-      between the specification and the test, and between the test and the evidence that the
-      test actually proved something.
+      I'm Matthew Collaro, a systems engineer working on embedded systems, systems
+      architecture, and model-based engineering. My work sits at the seam where
+      engineering programs usually break: between the SysML model and the specification,
+      between the specification and the test, and between the test and the evidence that
+      the test actually proved something.
     </p>
     <p>
-      Most of what I build is tooling for that problem — software that keeps requirements,
-      architecture decisions, and verification results linked to each other as a program
-      changes, instead of letting them drift apart over months until nobody can say which
-      requirement a given design decision was meant to satisfy.
+      The through-line is a conviction that traceability shouldn't be a documentation
+      task. On most programs it's treated as one — engineers do the real work in their
+      models and on their test benches, and then somebody reconstructs the links
+      afterward, from memory, under deadline. That reconstruction is where the errors get
+      in, and it's why a requirement can sit unsatisfied for two review cycles before
+      anyone notices.
     </p>
     <p>
-      The through-line in my work is a conviction that traceability shouldn't be a
-      documentation task. On most programs it's treated as one: engineers do the real
-      work in their models and their test benches, and then somebody reconstructs the
-      links afterward, from memory, under deadline. That reconstruction is where the
-      errors get in, and it's why a requirement can sit unsatisfied for two review
-      cycles before anyone notices.
-    </p>
-    <p>
-      I'd rather the links be a side effect of the engineering itself — captured when
-      the decision is made, checked continuously, and surfaced the moment they break.
-      That's the problem I've spent my time on, and most of what I've built is some
-      attempt at it.
+      I'd rather the links be a side effect of the engineering itself — captured when the
+      decision is made, checked continuously, and surfaced the moment they break. That's
+      the problem I've spent my career on, across automotive, commercial aviation, and
+      aerospace manufacturing, and it's what I'm building tooling for now.
     </p>
   </section>
 
-  <section id="work">
-    <h2>What I work on</h2>
+  <section id="experience">
+    <h2>Experience</h2>
 
     <article class="entry">
-      <h3>Model-based systems engineering tooling</h3>
+      <h3>Senior Systems Engineer — Lucid Motors</h3>
+      <p class="meta">Phoenix, AZ &middot; 2025&ndash;present</p>
       <p>
-        Requirements management on large programs is still largely a document problem
-        pretending to be an engineering problem. A requirement gets written in one tool,
-        modeled in a second, tested in a third, and the links between those three are
-        maintained by hand in a spreadsheet — until they aren't.
-      </p>
-      <p>
-        I build software that treats those links as first-class data: a governed graph
-        where a change to a requirement propagates to the architecture elements that
-        implement it and the verification artifacts that close it out, so the traceability
-        is a byproduct of doing the work rather than a separate documentation exercise
-        performed after the fact.
+        Cross-domain integration of infotainment and driver feedback systems on
+        autonomy-enabled vehicle builds, resolving notification timing, media routing,
+        and vehicle state synchronization defects affecting feature readiness. I develop
+        MBSE and SysML behavioral models of vehicle audio architectures and HMI
+        interaction flows to clarify signal dependencies and functional ownership
+        boundaries across infotainment controllers, body modules, and autonomous compute
+        domains.
       </p>
     </article>
 
     <article class="entry">
-      <h3>Continuous verification</h3>
+      <h3>Founder and Platform Systems Architect — Vector Stream Systems</h3>
+      <p class="meta">2024&ndash;present</p>
       <p>
-        Verification is usually treated as a phase — something that happens near the end,
-        against a baseline that has already moved. I'm interested in the alternative:
-        verification that runs continuously against the current state of the design, so
-        that a broken trace or an unsatisfied requirement surfaces the day it breaks
-        rather than at a review months later.
+        I founded Vector Stream Systems and lead architecture for a governed engineering
+        intelligence platform that synchronizes requirements, model context, semantic
+        relationships, and system constraints across MBSE workflows. The underlying
+        approach is the subject of a U.S. provisional patent application for an
+        Autonomous Requirements Traceability and Engineering Synchronization System.
+      </p>
+      <p>
+        The system combines a hybrid reasoning architecture — ontology modeling over an
+        accessible graph structure — with integrations across CAD, CAE, PLM, MBSE, and
+        requirements-management toolchains, including CATIA, Ansys, MATLAB, Cameo MBSE,
+        DOORS, JAMA, SysML, UML, and Ecore/XMI ingestion. The prototype infrastructure is
+        built in Rust, Python, Docker, and Linux with CI/CD workflows, using Rust-based
+        components for performance-sensitive graph, identity, dependency-DAG,
+        context-update, and constraint-processing paths.
       </p>
     </article>
 
     <article class="entry">
-      <h3>Open source</h3>
+      <h3>Lead Model Based Systems Engineer — Boeing Commercial Airplanes</h3>
+      <p class="meta">Everett, WA &middot; 2022&ndash;2024</p>
       <p>
-        I develop in the open where I can. My code is at
-        <a href="https://github.com/radsilent" rel="me">github.com/radsilent</a>.
+        I authored the Systems Engineering Management Plan for a next-generation
+        long-range aircraft program, defining modeling governance and development
+        workflows, and created model-based Interface Control Diagrams used to identify
+        network system vulnerabilities supporting aircraft cybersecurity threat analysis.
+      </p>
+      <p>
+        I conceptualized distributed aircraft network architecture enhancements across
+        777 and 787 platforms to improve safety, redundancy, and cyber resilience, and
+        developed model-based safety and hazard assessment tooling integrated into
+        engineering workflows supporting certification-oriented analysis. Alongside the
+        technical work I led a community of practice of more than 100 engineers advancing
+        MBSE adoption within the Cabin and Network Systems organizations, and planned and
+        executed significant revisions to network and IoT system models supporting
+        integrated product team coordination across roughly 300 engineers.
       </p>
     </article>
+
+    <article class="entry">
+      <h3>Systems Engineering Consultant — Deloitte Government &amp; Public Services</h3>
+      <p class="meta">Remote &middot; 2021&ndash;2022</p>
+      <p>
+        Developed MBSE architecture representations for advanced naval concept systems
+        using OOSEM methodologies, and facilitated stakeholder understanding of the value
+        of system modeling.
+      </p>
+    </article>
+
+    <article class="entry">
+      <h3>Manufacturing Engineer — Parker Hannifin Aerospace</h3>
+      <p class="meta">Irvine, CA &middot; 2019&ndash;2020</p>
+      <p>
+        Created repair and overhaul work instructions for electro-mechanical flight
+        control actuation systems supporting military aircraft sustainment, and
+        coordinated implementation of Solumina Maintenance Repair &amp; Overhaul process
+        planning software to improve production workflow visibility. I replaced legacy
+        analog hydraulic test units with digital data acquisition systems, improving
+        measurement repeatability and diagnostic capability.
+      </p>
+    </article>
+  </section>
+
+  <section id="research">
+    <h2>Patent and research</h2>
+    <p>
+      <strong>Autonomous Requirements Traceability and Engineering Synchronization
+      System</strong> — U.S. Provisional Patent Application No. 64/073,689. A formalized
+      framework for requirements traceability, engineering synchronization, and
+      controlled system-context access in AI-assisted engineering environments.
+    </p>
+    <p>
+      Related work includes machine-learning methods for retrieving related designs,
+      grounding natural-language engineering queries in semantic context, and detecting
+      patterns across graph-based engineering datasets; and coordination patterns that
+      let AI-assisted engineering tools access structured, versioned, and governed system
+      context through controlled interfaces.
+    </p>
+  </section>
+
+  <section id="education">
+    <h2>Education and certification</h2>
+    <ul>
+      <li>B.S. Mechanical Engineering — University of South Florida</li>
+      <li>SysML 101 / 201 MBSE Certificate — Georgia Institute of Technology</li>
+      <li>Software Architecture; Computer Networks</li>
+    </ul>
+  </section>
+
+  <section id="skills">
+    <h2>Skills</h2>
+    <ul>
+      <li><strong>Systems engineering and architecture</strong> — Model-Based Systems Engineering (MBSE), SysML behavioral and interface modeling, distributed system architecture, requirements traceability</li>
+      <li><strong>Embedded and networked platforms</strong> — infotainment and HMI integration, embedded interface definition</li>
+      <li><strong>Software and data engineering</strong> — Python, Rust, CUDA, structured dataset normalization, directed graph modeling, experimental time-series forecasting (TensorFlow)</li>
+      <li><strong>Compute and infrastructure</strong> — Linux system configuration, Docker containerization, reverse proxy networking, secure remote access, CI/CD automation</li>
+      <li><strong>Engineering tooling</strong> — Cameo / MagicDraw, DoDAF / UAF viewpoints, UML, Figma, Atlassian JIRA and Confluence</li>
+      <li><strong>Product lifecycle and manufacturing</strong> — Teamcenter PLM, Enovia, Windchill, Solumina MRO process planning, digital test equipment integration</li>
+    </ul>
   </section>
 
   <section id="contact">
@@ -139,10 +222,8 @@
       <a href="mailto:streamline@vectorstreamsystems.com">streamline@vectorstreamsystems.com</a>.
     </p>
     <ul class="profiles">
+      <li><a href="https://www.linkedin.com/in/mattcollaro/" rel="me">LinkedIn</a></li>
       <li><a href="https://github.com/radsilent" rel="me">GitHub</a></li>
-      <!-- Add each profile here as you create it, and mirror it into the
-           sameAs array in the JSON-LD block above. rel="me" is what lets
-           search engines treat these as identity claims rather than plain links. -->
     </ul>
   </section>
 
