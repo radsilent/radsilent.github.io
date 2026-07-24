@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Why MBSE Adoption Stalls — Matthew Collaro</title>
+<meta name="description" content="MBSE rollouts fail for organizational reasons, not technical ones. Matthew Collaro on what actually drives adoption across large engineering organizations." />
+<meta name="robots" content="index,follow,max-image-preview:large" />
+<link rel="canonical" href="https://radsilent.github.io/articles/mbse-adoption.html" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Why MBSE Adoption Stalls" />
+<meta property="og:description" content="MBSE rollouts fail for organizational reasons, not technical ones. What actually drives adoption across large engineering organizations." />
+<meta property="og:url" content="https://radsilent.github.io/articles/mbse-adoption.html" />
+<link rel="stylesheet" href="../style.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Why MBSE Adoption Stalls",
+  "description": "MBSE rollouts fail for organizational reasons, not technical ones. What actually drives adoption across large engineering organizations.",
+  "author": {
+    "@type": "Person",
+    "@id": "https://radsilent.github.io/#matthew-collaro",
+    "name": "Matthew Collaro",
+    "url": "https://radsilent.github.io/"
+  },
+  "mainEntityOfPage": "https://radsilent.github.io/articles/mbse-adoption.html",
+  "datePublished": "2026-07-24",
+  "inLanguage": "en"
+}
+</script>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="crumb"><a href="../">Matthew Collaro</a></p>
+  <h1>Why MBSE Adoption Stalls</h1>
+  <p class="tagline">The obstacles are almost never the ones in the rollout plan.</p>
+</header>
+
+<main>
+<article>
+
+<p>
+  I've spent a good part of my career on MBSE adoption inside large engineering
+  organizations — writing the governance, building the tooling, and running a community
+  of practice for a group of engineers large enough that I could watch adoption succeed
+  in some corners and quietly die in others. The pattern in the failures was consistent,
+  and it had very little to do with modeling.
+</p>
+
+<h2>The mandate problem</h2>
+
+<p>
+  Most rollouts begin with a mandate. Leadership decides the organization will be
+  model-based, a directive follows, and teams are told to model.
+</p>
+
+<p>
+  What this produces is compliance, which resembles adoption from a distance and is a
+  fundamentally different thing. A team under a mandate builds a model because it's
+  required, sized to satisfy the requirement and no larger. The model is built once, near
+  the milestone that demands it, and then abandoned, because nothing downstream depends
+  on it. It is a deliverable, and after delivery it has no function.
+</p>
+
+<p>
+  The tell is easy to check: ask when a model was last opened by someone who wasn't
+  updating it for a review. On compliance-driven programs the answer is never. The model
+  has no readers. And a model with no readers is pure cost — real effort producing an
+  artifact that informs no decision.
+</p>
+
+<h2>Adoption follows dependency</h2>
+
+<p>
+  Where I've seen it stick, it stuck because something the team needed came out of the
+  model and could not be gotten any other way.
+</p>
+
+<p>
+  A generated interface document that's always current, so nobody maintains tables by
+  hand. An automated consistency check that catches the class of defect that burned the
+  team last program. A safety analysis that reads the architecture directly instead of
+  requiring someone to transcribe it. In each case the team maintains the model because
+  they consume something from it, and letting it go stale costs them personally and
+  immediately.
+</p>
+
+<p>
+  That's the actual mechanism: adoption follows dependency, not directive. Which reframes
+  the rollout question from "how do we get teams to model" to "what can we generate from
+  a model that teams currently produce painfully by hand." The second question has
+  concrete answers and each one is a wedge.
+</p>
+
+<h2>The transcription trap</h2>
+
+<p>
+  A specific and very common failure: the model is built by someone other than the
+  engineers who own the design.
+</p>
+
+<p>
+  It happens for understandable reasons. Modeling tools have a learning curve, the
+  organization has a few skilled modelers, and the efficient-looking move is to have them
+  build the models by interviewing subsystem owners. The result is a transcription. The
+  modeler captures their understanding of what the engineer said, at one point in time.
+  The engineer doesn't own it, doesn't read it, and doesn't update it, because it isn't
+  theirs and it isn't where they work. It's stale within a month.
+</p>
+
+<p>
+  The models that stay alive are built by the people who own the design. This means
+  accepting lower modeling quality in exchange for currency and ownership — a trade
+  experienced modelers resist, because the resulting models violate conventions and use
+  stereotypes inconsistently. But a rough model the owner maintains is worth more than an
+  elegant one nobody touches, and the conventions can be tightened later, once the habit
+  exists.
+</p>
+
+<h2>Tooling friction compounds</h2>
+
+<p>
+  Modeling tools are, generally, not pleasant. Heavy clients, slow load times, awkward
+  repository operations, merge conflicts resolved through interfaces that make you guess.
+  An engineer who has to wait two minutes for a model to open, navigate several dialogs
+  to make a small edit, and then survive a fragile check-in will batch their edits. And
+  batching means the model reflects the design as of the last batch, not as of now.
+</p>
+
+<p>
+  This friction is usually treated as a fixed cost of the tool. It shouldn't be. Some of
+  it is genuinely fixed, but a surprising amount is configuration, repository structure,
+  and workflow — model partitioning that reduces conflicts, sensible branching, scripted
+  operations for the common tedious tasks. Time spent reducing per-edit cost has, in my
+  experience, a higher return than any amount of training, because it changes the
+  economics of the behavior you want rather than exhorting people toward it.
+</p>
+
+<h2>The measurement problem</h2>
+
+<p>
+  Adoption programs need to report progress, and the available metrics are bad. Number of
+  models. Number of elements. Percentage of subsystems with a model. Engineers trained.
+</p>
+
+<p>
+  All of these are inputs, and all of them are gameable — trivially so. Element count in
+  particular rewards bloat. I've seen models grow enormous under measurement while
+  becoming less useful, because the incentive was volume.
+</p>
+
+<p>
+  Better metrics measure consumption rather than production. How many artifacts are
+  generated from models rather than authored by hand. How many automated checks run
+  against models per week. How many engineers opened a model they don't own. These are
+  harder to collect and they measure the thing you actually want — whether the model has
+  become load-bearing.
+</p>
+
+<h2>Communities of practice, honestly assessed</h2>
+
+<p>
+  I've run one, and I'd say their value is real but different from what's usually claimed.
+  They're not primarily a training mechanism; a community meeting is a poor way to teach
+  a tool. What they do well is make practice visible across organizational boundaries —
+  a team discovers another team solved the problem they're stuck on, patterns propagate
+  without anyone standardizing them, and the person who built something useful gets an
+  audience for it.
+</p>
+
+<p>
+  They also fail in a recognizable way: becoming a status meeting where each team reports
+  progress to leadership. Once that happens, attendance becomes obligation and the
+  cross-pollination stops. Keeping it a peer forum rather than a reporting line is the
+  main thing worth protecting.
+</p>
+
+<h2>The honest summary</h2>
+
+<p>
+  If I had to compress it: don't mandate modeling, build something teams want that
+  requires a model as input. Let the design owners build their own models even when the
+  models are worse. Spend real effort on per-edit friction. Measure consumption, not
+  production. And expect the whole thing to take longer than the plan says, because
+  you're not deploying a tool — you're changing where a large group of engineers believe
+  the authoritative description of the system lives, and that belief moves slowly and only
+  in response to evidence.
+</p>
+
+<p class="muted">
+  Related: <a href="model-based-interface-control.html">model-based interface control</a>
+  and <a href="continuous-verification.html">continuous verification</a>.
+</p>
+
+</article>
+</main>
+
+<footer>
+  <p><a href="../">&larr; Back</a> &middot; &copy; 2026 Matthew Collaro</p>
+</footer>
+
+</body>
+</html>

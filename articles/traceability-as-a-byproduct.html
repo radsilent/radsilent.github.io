@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Traceability Should Be a Byproduct, Not a Deliverable — Matthew Collaro</title>
+<meta name="description" content="Requirements traceability fails on most programs because it is treated as documentation produced after the engineering. Matthew Collaro on why the links have to be captured at the moment of decision." />
+<meta name="robots" content="index,follow,max-image-preview:large" />
+<link rel="canonical" href="https://radsilent.github.io/articles/traceability-as-a-byproduct.html" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Traceability Should Be a Byproduct, Not a Deliverable" />
+<meta property="og:description" content="Why requirements traceability fails on most programs, and what capturing links at the moment of decision actually requires." />
+<meta property="og:url" content="https://radsilent.github.io/articles/traceability-as-a-byproduct.html" />
+<link rel="stylesheet" href="../style.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Traceability Should Be a Byproduct, Not a Deliverable",
+  "description": "Why requirements traceability fails on most programs, and what capturing links at the moment of decision actually requires.",
+  "author": {
+    "@type": "Person",
+    "@id": "https://radsilent.github.io/#matthew-collaro",
+    "name": "Matthew Collaro",
+    "url": "https://radsilent.github.io/"
+  },
+  "mainEntityOfPage": "https://radsilent.github.io/articles/traceability-as-a-byproduct.html",
+  "datePublished": "2026-07-24",
+  "inLanguage": "en"
+}
+</script>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="crumb"><a href="../">Matthew Collaro</a></p>
+  <h1>Traceability Should Be a Byproduct, Not a Deliverable</h1>
+  <p class="tagline">On why requirements traceability decays, and what it takes to stop it.</p>
+</header>
+
+<main>
+<article>
+
+<p>
+  Every program I've worked on has had a traceability matrix. Almost none of them had
+  traceability. The distinction matters, and it's not pedantic: the matrix is an
+  artifact, and the artifact can be complete, formatted, reviewed, and signed while the
+  underlying property it claims to demonstrate — that every requirement is implemented by
+  something, and that every implementation is verified by something — is quietly false.
+</p>
+
+<p>
+  The reason is structural. On most programs, traceability is a deliverable. Someone owns
+  it. It has a due date, usually pegged to a review milestone. And because it has a due
+  date rather than a trigger, it gets produced the way deliverables get produced: in a
+  concentrated burst, near the deadline, by reconstructing decisions that were made weeks
+  or months earlier.
+</p>
+
+<h2>Reconstruction is where the errors enter</h2>
+
+<p>
+  Consider what that reconstruction actually involves. An engineer opens the requirements
+  database and a system model side by side. For each requirement, they ask: what in this
+  model satisfies it? Sometimes the answer is obvious. Often it isn't, because the
+  element that satisfies it was renamed during a refactor, or the requirement was
+  decomposed into three children and the parent now traces to nothing directly, or the
+  satisfying behavior is distributed across two subsystems owned by different teams and
+  neither one considers it theirs.
+</p>
+
+<p>
+  Under deadline, the engineer makes a judgment call. That judgment is usually defensible
+  and occasionally wrong, and — this is the part that matters — the record does not
+  distinguish between the two. A link created from certain knowledge and a link created
+  from a plausible guess are the same row in the matrix. There is no confidence field.
+  There is no provenance. Six months later, when someone asks why requirement 4.2.17
+  traces to the power distribution module, nobody can answer, because the person who
+  made the call was reasoning about a model state that no longer exists.
+</p>
+
+<p>
+  This is why traceability decays even on well-run programs. It isn't negligence. It's
+  that the information required to create a correct link is available at the moment the
+  design decision is made and is substantially degraded by the time the deliverable is
+  due.
+</p>
+
+<h2>The cost is measured in review cycles</h2>
+
+<p>
+  The practical consequence is latency. A requirement that nothing satisfies is a defect,
+  and like any defect, its cost scales with how long it survives undetected. But
+  traceability gaps have an unusually long detection latency because the mechanism that
+  would detect them only runs at milestones.
+</p>
+
+<p>
+  So a requirement can go unsatisfied through an entire design phase. The architecture
+  gets baselined around the gap. Interfaces are defined against the incorrect assumption.
+  By the time the matrix is assembled and the gap surfaces, the fix isn't "implement the
+  requirement" — it's "renegotiate an interface that four teams have already built
+  against." I've watched that specific failure consume months, and in every case the
+  information needed to prevent it existed at the beginning and simply wasn't checked.
+</p>
+
+<h2>What "byproduct" actually means</h2>
+
+<p>
+  The alternative is to make the link a side effect of the engineering work rather than a
+  separate activity. That sounds like a tooling statement, and partly it is, but the
+  harder part is a modeling discipline. Three things have to be true.
+</p>
+
+<p>
+  <strong>The link has to be cheap to create at decision time.</strong> If allocating a
+  requirement to an architectural element requires leaving the modeling tool, opening a
+  separate requirements application, locating the right identifier, and pasting it into a
+  field, engineers will batch that work — and batching it is precisely the failure mode.
+  The cost of recording the link must be low enough that doing it immediately is easier
+  than deferring it. In practice this means the requirement identifiers have to be
+  resolvable from inside the modeling environment, which means an integration, which is
+  where most programs stop.
+</p>
+
+<p>
+  <strong>The link has to be typed, not generic.</strong> "Related to" is not
+  traceability. A satisfy relationship, a derive relationship, a refine relationship, and
+  a verify relationship carry different obligations and support different queries. If
+  every edge in the graph has the same type, you cannot ask the questions that matter —
+  such as which requirements have a satisfy edge but no verify edge, which is the single
+  most useful query in the entire discipline and is unanswerable in a flat matrix.
+</p>
+
+<p>
+  <strong>The link has to be validated continuously, not at milestones.</strong> Once
+  links are typed and machine-readable, the completeness properties become computable.
+  Every leaf requirement has at least one satisfy edge. Every satisfy edge terminates at
+  an element that exists in the current model. Every requirement with a satisfy edge has
+  a verify edge. None of these need a human, and none need to wait for a review.
+</p>
+
+<h2>The change-propagation problem</h2>
+
+<p>
+  Static correctness is the easier half. The harder half is that programs change, and a
+  link that was correct when created can be invalidated by a change somewhere else
+  entirely — a requirement is reworded and its meaning shifts, an architectural element
+  is decomposed and its satisfying behavior moves to a child, a test is modified and no
+  longer exercises the condition it was written to verify.
+</p>
+
+<p>
+  None of these edit the link itself. All of them break it. Which means the interesting
+  question isn't "are the links valid" but "which links became suspect as a result of
+  this change" — a reachability problem over a dependency graph, and one that only
+  answers well if the graph is versioned. You need to compare states, not inspect one.
+</p>
+
+<p>
+  This is where the document-centric approach fails completely and unrecoverably. A
+  matrix exported to a spreadsheet has no notion of a previous state. It cannot tell you
+  what changed. It can only tell you what it currently claims, and it makes that claim
+  with exactly as much confidence whether it was validated this morning or assembled from
+  guesses eight months ago.
+</p>
+
+<h2>Where this leaves the practice</h2>
+
+<p>
+  I don't think the discipline's problem is a shortage of process. There is abundant
+  process. The problem is that the process specifies an artifact and leaves the mechanism
+  unaddressed — it says the matrix shall be maintained, without asking what would have to
+  be true for maintenance to be tractable.
+</p>
+
+<p>
+  What would have to be true is that links are captured at the point of decision by the
+  person who has the knowledge, in a form a machine can check, and re-checked whenever
+  anything they depend on moves. Everything else is bookkeeping about bookkeeping.
+</p>
+
+<p class="muted">
+  This is the problem I work on. More at <a href="../">matthew collaro</a>, or the
+  companion piece on <a href="continuous-verification.html">continuous verification</a>.
+</p>
+
+</article>
+</main>
+
+<footer>
+  <p><a href="../">&larr; Back</a> &middot; &copy; 2026 Matthew Collaro</p>
+</footer>
+
+</body>
+</html>
