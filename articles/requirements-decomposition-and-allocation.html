@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Decomposition Is Where Requirements Go Wrong — Matthew Collaro</title>
+<meta name="description" content="Most requirement defects are introduced during decomposition and allocation, not authoring. Matthew Collaro on budget conservation, derived requirements, and the sufficiency problem." />
+<meta name="robots" content="index,follow,max-image-preview:large" />
+<link rel="canonical" href="https://radsilent.github.io/articles/requirements-decomposition-and-allocation.html" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Decomposition Is Where Requirements Go Wrong" />
+<meta property="og:description" content="Most requirement defects are introduced during decomposition and allocation, not authoring." />
+<meta property="og:url" content="https://radsilent.github.io/articles/requirements-decomposition-and-allocation.html" />
+<link rel="stylesheet" href="../style.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Decomposition Is Where Requirements Go Wrong",
+  "description": "Most requirement defects are introduced during decomposition and allocation, not authoring.",
+  "author": {
+    "@type": "Person",
+    "@id": "https://radsilent.github.io/#matthew-collaro",
+    "name": "Matthew Collaro",
+    "url": "https://radsilent.github.io/"
+  },
+  "mainEntityOfPage": "https://radsilent.github.io/articles/requirements-decomposition-and-allocation.html",
+  "datePublished": "2026-07-24",
+  "inLanguage": "en"
+}
+</script>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="crumb"><a href="../">Matthew Collaro</a></p>
+  <h1>Decomposition Is Where Requirements Go Wrong</h1>
+  <p class="tagline">Requirements quality effort goes into authoring. The defects come from the level below.</p>
+</header>
+
+<main>
+<article>
+
+<p>
+  There is a large literature on writing good requirements. Use "shall." Avoid ambiguous
+  adjectives. Make it verifiable, atomic, unambiguous, necessary. Requirements training
+  is mostly training in authoring, and review checklists are mostly authoring checklists.
+</p>
+
+<p>
+  That effort is not misplaced, but it targets the wrong stage. In my experience the
+  defects that actually hurt programs are not badly written requirements. They're
+  well-written requirements that were decomposed incorrectly — and decomposition receives
+  a fraction of the scrutiny, because the children individually pass every authoring
+  check.
+</p>
+
+<h2>The sufficiency problem</h2>
+
+<p>
+  When a parent requirement is decomposed into children, an obligation is created that
+  almost nothing checks: the children, collectively, must be sufficient to satisfy the
+  parent. Satisfying every child must imply satisfying the parent.
+</p>
+
+<p>
+  This is not verified on most programs. What is verified is that every child traces to a
+  parent — the direction that's easy to check, since it's a property of each individual
+  link. Sufficiency is a property of the <em>set</em>, and sets are harder. You cannot
+  look at one child and tell whether the group is complete. You have to reason about
+  whether anything is missing, and "is anything missing" is a judgment that no
+  completeness metric captures.
+</p>
+
+<p>
+  So the common failure is a parent requirement decomposed into four children that are
+  each individually correct, each traceable, each verifiable — and that collectively miss
+  a case. All four children pass verification. The parent is marked satisfied by
+  inference. The gap surfaces during integration, or in the field.
+</p>
+
+<p>
+  The mitigation isn't automation, because sufficiency isn't computable in general. It's
+  making the obligation explicit at decomposition time: recording, alongside the
+  decomposition, the argument for why these children are sufficient. Not a formal proof —
+  a sentence or two of rationale that a reviewer can attack. Most decompositions have
+  such an argument in the author's head. Almost none write it down, and once it isn't
+  written down there is nothing for review to engage with, so review defaults to checking
+  each child in isolation, which is exactly the check that cannot find the defect.
+</p>
+
+<h2>Budgets and the negotiation problem</h2>
+
+<p>
+  Quantitative decomposition has a cleaner failure mode and a more tractable fix. When a
+  top-level budget — mass, power, latency, bandwidth, thermal — is allocated across
+  subsystems, the children should sum within the parent.
+</p>
+
+<p>
+  This is arithmetic, and it is violated constantly. The reason is organizational rather
+  than mathematical. Allocations are negotiated pairwise: a subsystem owner argues they
+  need more, the systems engineer agrees, the allocation is adjusted. That conversation
+  happens between two people and is recorded in the requirement for that subsystem. What
+  is <em>not</em> recomputed is the total, because nobody's job is to recompute the total
+  after each pairwise negotiation, and there may be dozens over a design phase.
+</p>
+
+<p>
+  The result is a budget that was balanced at baseline and drifted into overrun through a
+  series of individually reasonable decisions, each of which appeared affordable in
+  isolation. The overrun surfaces when someone finally sums the column, usually late,
+  usually at a point where recovering it means design changes across several subsystems.
+</p>
+
+<p>
+  This one is fully automatable, and it's the highest-return check I know of in
+  requirements management. If allocations are structured data rather than numbers embedded
+  in requirement prose, conservation is a query that runs on every change. The obstacle is
+  almost always that the allocation lives inside a sentence — "The sensor module shall
+  consume no more than 14 W" — where it's invisible to any tool. Extracting quantities
+  into typed attributes is unglamorous data modeling that pays for itself the first time
+  it catches a drift.
+</p>
+
+<h2>Derived requirements and lost rationale</h2>
+
+<p>
+  A derived requirement doesn't decompose from a parent; it arises from a design decision.
+  Choosing a particular bus architecture creates timing requirements that no stakeholder
+  asked for and that exist only because of that choice.
+</p>
+
+<p>
+  These are legitimate and unavoidable. The problem is that they get recorded as
+  requirements without recording what they derive from, and then they outlive the decision
+  that produced them. The architecture changes. The derived requirement stays, because
+  nothing links it to the now-obsolete choice. Years later it's a constraint nobody can
+  explain, and it gets treated as a given, because the safe response to a requirement you
+  don't understand is to comply with it.
+</p>
+
+<p>
+  Every mature program accumulates these. I've watched engineers design around a
+  constraint that existed because of a component selected two revisions earlier and no
+  longer in the system. The fix is cheap and structural: derived requirements should link
+  to the decision that created them, not just to a parent requirement. Then when the
+  decision is revisited, what it created is enumerable.
+</p>
+
+<h2>Allocation to the wrong kind of thing</h2>
+
+<p>
+  A subtler failure: allocating a requirement to an organizational unit rather than to an
+  architectural element. "The avionics team shall ensure..." — which feels natural,
+  because allocation often happens in the same conversation as work assignment.
+</p>
+
+<p>
+  It breaks traceability in a specific way. Teams reorganize. Scope moves. When the team
+  is dissolved or renamed, the allocation points at nothing, and the requirement is
+  orphaned without any structural signal that it has been. Allocating to elements means
+  the link survives reorganization, and responsibility is derived from element ownership —
+  a mapping that can change without touching the requirement at all.
+</p>
+
+<h2>What review should ask</h2>
+
+<p>
+  If I were rewriting a decomposition review checklist, it would ask about the set rather
+  than the items. Why are these children sufficient? What case would fail if all of them
+  passed? Do the quantitative allocations sum within the parent, and when was that last
+  computed? Which of these are derived rather than decomposed, and what decision produced
+  them? Is each allocated to an element that will still exist after the next
+  reorganization?
+</p>
+
+<p>
+  None of these appear on a standard checklist, and every one of them targets a defect
+  class that authoring checks are structurally incapable of finding.
+</p>
+
+<p class="muted">
+  Related: <a href="traceability-as-a-byproduct.html">traceability as a byproduct</a> and
+  <a href="continuous-verification.html">continuous verification</a>.
+</p>
+
+</article>
+</main>
+
+<footer>
+  <p><a href="../">&larr; Back</a> &middot; &copy; 2026 Matthew Collaro</p>
+</footer>
+
+</body>
+</html>
