@@ -39,8 +39,9 @@ free plan Pages is disabled the moment it goes private, and the site 404s.
 ## Content rule
 
 Two former employers are excluded from anything published here by standing
-instruction. Release gate, must return nothing before every push:
+instruction. Personal phone and personal email are likewise never published —
+contact routes through the company site.
 
-```bash
-grep -rniE "raytheon|northrop|grumman|protonmail" . --exclude-dir=.git
-```
+The release-gate grep pattern is kept in local notes rather than in this repo,
+since spelling the excluded terms here would publish them. Run it against the
+working tree before every push; it must return nothing.
