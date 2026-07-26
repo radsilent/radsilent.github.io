@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Engineering Data Is a Graph — Matthew Collaro</title>
+<title>Engineering Data Is a Graph, Matthew Collaro</title>
 <meta name="description" content="Requirements, architecture, parts, and tests form a relational structure stored as documents. Matthew Collaro on modeling engineering data as a versioned graph and what it makes possible." />
 <meta name="robots" content="index,follow,max-image-preview:large" />
 <link rel="canonical" href="https://radsilent.github.io/articles/engineering-knowledge-graphs.html" />
@@ -55,7 +55,7 @@
 </p>
 
 <p>
-  The consequence is that ordinary questions become expensive. Not exotic questions —
+  The consequence is that ordinary questions become expensive. Not exotic questions, 
   ordinary ones. What is affected if this requirement changes? Which requirements are
   unverified? Which parts are involved in satisfying this safety requirement? Each is a
   traversal, and each currently requires an engineer to spend a day cross-referencing
@@ -65,8 +65,8 @@
 <h2>Why documents lose</h2>
 
 <p>
-  A document can express a relationship — "this requirement is satisfied by the power
-  distribution module" — but only as prose. To follow it, something must resolve the
+  A document can express a relationship, "this requirement is satisfied by the power
+  distribution module", but only as prose. To follow it, something must resolve the
   phrase to an object. A human does this using context. A machine cannot, reliably,
   because the same module appears as "PDM," "power distribution," "the PDU," and
   "P/N 4471-002" across four documents written by three teams.
@@ -76,7 +76,7 @@
   This is why traceability matrices exist: they're an attempt to extract the graph from
   the documents into a form that can be queried. But a matrix is a flattened projection.
   It captures one relationship type between two object types, loses everything else, and
-  goes stale the moment either side changes — the graph reconstituted badly, once,
+  goes stale the moment either side changes: the graph reconstituted badly, once,
   manually.
 </p>
 
@@ -92,7 +92,7 @@
   if the requirement changes, the element may no longer satisfy it. <em>Derives from</em>
   means a requirement was decomposed from a parent, which implies that the children must
   collectively be sufficient. <em>Verifies</em> means a test demonstrates satisfaction,
-  which implies a currency question — was the test run against a version of the design
+  which implies a currency question, was the test run against a version of the design
   that still resembles this one?
 </p>
 
@@ -112,7 +112,7 @@
 <p>
   What changed since the last baseline. Which links became suspect as a result. Whether
   this test result is still valid given the design has moved. Which decisions were made
-  under assumptions that no longer hold. None of these are answerable from a snapshot —
+  under assumptions that no longer hold. None of these are answerable from a snapshot, 
   they need history, and specifically they need the ability to compare two states of the
   graph and characterize the difference in engineering terms rather than as a textual
   diff.
@@ -122,7 +122,7 @@
   That "in engineering terms" qualifier does a lot of work. Anyone can diff two exports.
   The useful statement isn't "these 340 lines differ" but "requirement PWR-114's
   allocation changed, which invalidates the satisfy link to the sensor module, which
-  means test TC-2201 no longer verifies the current requirement" — a derived consequence,
+  means test TC-2201 no longer verifies the current requirement": a derived consequence,
   computed by propagating the change along typed edges and applying the rules those types
   imply.
 </p>
@@ -149,7 +149,7 @@
   Getting these rules right is the substance of the problem. Too permissive and every
   change floods the program with false impact, and people stop reading the reports. Too
   restrictive and real impacts are missed, which is worse, because now there's a tool
-  people trust that's wrong. I don't think there's a universal rule set — the tuning is
+  people trust that's wrong. I don't think there's a universal rule set, the tuning is
   domain-specific and it's earned through calibration against real change histories on a
   real program.
 </p>
@@ -157,7 +157,7 @@
 <h2>The ontology question</h2>
 
 <p>
-  All of this presumes agreement on what the node and edge types are — which is an
+  All of this presumes agreement on what the node and edge types are, which is an
   ontology, and ontology work has a reputation for consuming years and producing
   taxonomies nobody uses.
 </p>
@@ -177,7 +177,7 @@
   When it works, the shift is from questions that take days to questions that take
   seconds, which changes which questions get asked. Nobody runs an impact analysis that
   costs a week unless the change is large. If it costs a second, you run it on every
-  change — and the small changes are precisely the ones whose consequences get missed.
+  change, and the small changes are precisely the ones whose consequences get missed.
 </p>
 
 <p>

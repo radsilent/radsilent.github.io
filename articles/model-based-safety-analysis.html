@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Safety Analysis Belongs in the Model — Matthew Collaro</title>
+<title>Safety Analysis Belongs in the Model, Matthew Collaro</title>
 <meta name="description" content="Hazard analysis is usually performed against a transcription of the architecture, in a separate tool, by a separate team. Matthew Collaro on integrating safety analysis into the system model." />
 <meta name="robots" content="index,follow,max-image-preview:large" />
 <link rel="canonical" href="https://radsilent.github.io/articles/model-based-safety-analysis.html" />
@@ -44,8 +44,8 @@
 <p>
   On most programs, safety analysis is performed by a separate team, in separate tools,
   against a separate representation of the system. The safety engineers read the design
-  documentation, build their own model of the architecture — a fault tree, an FMEA
-  worksheet, a hazard log — and analyze that.
+  documentation, build their own model of the architecture: a fault tree, an FMEA
+  worksheet, a hazard log, and analyze that.
 </p>
 
 <p>
@@ -66,7 +66,7 @@
 
 <p>
   So the question "is this analysis valid for the current design" has no cheap answer. It
-  requires a human to compare two representations element by element — expensive enough
+  requires a human to compare two representations element by element, expensive enough
   that it happens at milestones, which means the answer is only known at the moments when
   the analysis was being redone anyway.
 </p>
@@ -87,8 +87,8 @@
 
 <p>
   A basic event in a fault tree corresponds to a failure mode of a specific component. If
-  that correspondence is a typed link to the component in the system model — rather than a
-  text label that happens to match — then several things follow immediately. When the
+  that correspondence is a typed link to the component in the system model, rather than a
+  text label that happens to match, then several things follow immediately. When the
   component is removed, the basic event referencing it is flagged. When a component is
   added with no corresponding failure modes, the coverage gap is detectable. When the
   connection topology changes, the propagation paths the analysis assumed can be
@@ -99,7 +99,7 @@
   None of this automates the analysis. Deciding which failure modes matter, what their
   effects are, and how severe they are is engineering judgment that will not be
   automated. What's automated is the bookkeeping question of whether the judgment was
-  applied to the current system — which is the question that actually goes stale.
+  applied to the current system, which is the question that actually goes stale.
 </p>
 
 <h2>Failure propagation follows the interfaces</h2>
@@ -112,7 +112,7 @@
 </p>
 
 <p>
-  Candidate, not certainty — B may detect and reject the corrupted value, which is
+  Candidate, not certainty: B may detect and reject the corrupted value, which is
   precisely the kind of mitigation safety analysis exists to reason about. But the
   candidate set is derivable from the topology, and deriving it mechanically catches the
   propagation paths a human working from documentation misses. On a system with hundreds
@@ -138,7 +138,7 @@
 </p>
 
 <p>
-  Assembling that evidence from documents is a substantial effort in itself — largely
+  Assembling that evidence from documents is a substantial effort in itself, largely
   spent establishing correspondences that could have been maintained continuously at near
   zero marginal cost. When the analysis links to model elements by identity, the evidence
   package becomes a query: here is every hazard, the requirements mitigating it, the
@@ -155,7 +155,7 @@
 <h2>The organizational obstacle</h2>
 
 <p>
-  The barrier is rarely technical. Safety is frequently an independent organization —
+  The barrier is rarely technical. Safety is frequently an independent organization, 
   deliberately, and for good reason, since independence from design pressure is part of
   what makes the assessment credible.
 </p>
@@ -171,7 +171,7 @@
   overrule them, not about which database the artifacts sit in. Safety engineers keep
   ownership of hazard identification, severity classification, and adequacy of mitigation.
   What they give up is the obligation to manually maintain a private copy of the
-  architecture — which was never a source of independence, only of cost and drift.
+  architecture, which was never a source of independence, only of cost and drift.
 </p>
 
 <p>

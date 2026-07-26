@@ -1,7 +1,7 @@
 # radsilent.github.io
 
 Personal site for Matthew Collaro, systems engineer. Plain static HTML, no build
-step — edit the files and push.
+step, edit the files and push.
 
 ## Live URLs
 
@@ -33,13 +33,13 @@ Companion site: https://radsilent.github.io/matthew-collaro/ (repo
 git push origin main
 ```
 
-GitHub Pages serves `main` at the repo root. **The repo must stay public** — on a
+GitHub Pages serves `main` at the repo root. **The repo must stay public**, on a
 free plan Pages is disabled the moment it goes private, and the site 404s.
 
 ## Content rule
 
 Two former employers are excluded from anything published here by standing
-instruction. Personal phone and personal email are likewise never published —
+instruction. Personal phone and personal email are likewise never published, 
 contact routes through the company site.
 
 The release-gate grep pattern is kept in local notes rather than in this repo,

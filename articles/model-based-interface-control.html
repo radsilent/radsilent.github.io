@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Interface Control Is a Modeling Problem — Matthew Collaro</title>
+<title>Interface Control Is a Modeling Problem, Matthew Collaro</title>
 <meta name="description" content="Interface Control Documents describe interfaces in prose and go stale immediately. Matthew Collaro on model-based interface definition and what it enables for integration and cyber analysis." />
 <meta name="robots" content="index,follow,max-image-preview:large" />
 <link rel="canonical" href="https://radsilent.github.io/articles/model-based-interface-control.html" />
@@ -42,7 +42,7 @@
 <article>
 
 <p>
-  Interfaces are where systems fail. Not usually inside a subsystem — subsystem teams
+  Interfaces are where systems fail. Not usually inside a subsystem, subsystem teams
   know their own domain, test it thoroughly, and generally deliver something that works
   in isolation. Failures cluster at the boundaries, where two teams each built to their
   own reading of a shared agreement.
@@ -62,12 +62,12 @@
   The mechanism is mundane. A signal's range changes during detailed design. The change
   is captured in the subsystem's own documentation and in the code. Updating the ICD
   requires locating it, determining which of several tables mentions the signal, editing
-  the entry, and routing the document for re-approval — a process measured in weeks, for
+  the entry, and routing the document for re-approval: a process measured in weeks, for
   a change that took an afternoon.
 </p>
 
 <p>
-  Under schedule pressure, this gets deferred. Not skipped — deferred, with genuine
+  Under schedule pressure, this gets deferred. Not skipped: deferred, with genuine
   intent to catch up. Then it happens again. Within a few months the ICD describes an
   interface that no longer exists, and the teams on both sides know this, so they stop
   consulting it and coordinate directly by email instead. The document is still formally
@@ -82,19 +82,51 @@
   mechanism. The mechanism is the problem.
 </p>
 
+<h2>The other failure: modeling the organization instead of the system</h2>
+
+<p>
+  There is a second reason interface definition fails, and it is more fundamental than
+  staleness. Teams model their own organization rather than the system. The packages
+  mirror the org chart, the boundaries fall where reporting lines fall, and the resulting
+  structure describes who works on what instead of how the system is put together.
+</p>
+
+<p>
+  This looks reasonable, and it is how most programs partition work. But an interface
+  between two subsystems is a property of the system, not of the two teams that happen to
+  own them. When the decomposition follows the organization, every interface lands on a
+  boundary owned by two groups or by nobody, and in practice it is nobody. The interface
+  becomes the seam between two org units rather than a modeled element with a definition,
+  a type, and an owner.
+</p>
+
+<p>
+  You can see the consequence in the artifacts. The ICD ends up describing a negotiation
+  between departments rather than a connection between components, which is why so many
+  of them read as agreements about responsibility instead of specifications of behavior.
+  Reorganize the company and the model needs rework, which is a clear sign it was
+  describing the wrong thing.
+</p>
+
+<p>
+  Partition by interface instead. Every interface gets one owning engineer responsible for
+  defining it precisely enough that both sides can implement independently. Which org that
+  engineer reports into matters far less than whether they exist at all.
+</p>
+
 <h2>What modeling the interface changes</h2>
 
 <p>
-  If the interface is defined in the system model rather than described in a document —
+  If the interface is defined in the system model rather than described in a document, 
   ports with types, connections between them, signals with units and ranges and update
-  rates as structured attributes — several things become possible that prose cannot
+  rates as structured attributes, several things become possible that prose cannot
   support.
 </p>
 
 <p>
   <strong>Consistency becomes checkable.</strong> A signal produced with one unit and
   consumed as another is a query, not a careful reading. Type mismatches, range
-  incompatibilities, a producer's update rate slower than its consumer's requirement —
+  incompatibilities, a producer's update rate slower than its consumer's requirement, 
   all detectable automatically, all common, all currently caught by humans comparing
   tables across documents, if caught at all.
 </p>
@@ -107,7 +139,7 @@
 
 <p>
   <strong>The document becomes a view.</strong> This is the part that matters
-  organizationally. Programs need ICDs — for contracts, for suppliers, for
+  organizationally. Programs need ICDs: for contracts, for suppliers, for
   certification. The mistake is treating the document as the source. Generate it from the
   model instead, and it can never be stale, because it's regenerated on demand from the
   current state. Engineers update the model, which they're doing anyway; the document
@@ -130,7 +162,7 @@
 
 <p>
   If the interface definition is a set of documents, these questions can only be answered
-  by a human reading all of them and building a mental model — for a system with hundreds
+  by a human reading all of them and building a mental model, for a system with hundreds
   of components, this is not reliably possible, and the analysis is incomplete in ways
   nobody can quantify. If the topology is modeled, the same questions become queries you
   can re-run after every architectural change.
@@ -149,14 +181,14 @@
 <p>
   Two things are worth saying honestly. First, this only works if the model is actually
   maintained. Replacing a stale document with a stale model is not progress. What makes
-  the model likelier to stay current is that engineers have other reasons to touch it —
-  it feeds analysis, generates the document, drives the checks — whereas an ICD has
+  the model likelier to stay current is that engineers have other reasons to touch it, 
+  it feeds analysis, generates the document, drives the checks, whereas an ICD has
   exactly one use and that use is someone else's problem.
 </p>
 
 <p>
   Second, not everything belongs in the model. Rationale, negotiated exceptions,
-  historical context for a strange design choice — these are prose and should stay prose.
+  historical context for a strange design choice, these are prose and should stay prose.
   The goal isn't to eliminate documents. It's to stop using documents as the storage
   format for structured, checkable, relational data, which is what a signal table is.
 </p>
@@ -165,8 +197,8 @@
 
 <p>
   Nobody converts a program's interface definitions in one pass. What works is picking
-  the boundary that hurts most — usually the one between two organizations that have had
-  integration problems — modeling only that, generating its ICD from the model, and
+  the boundary that hurts most, usually the one between two organizations that have had
+  integration problems: modeling only that, generating its ICD from the model, and
   letting the result speak. When the generated document is demonstrably current and the
   neighboring hand-maintained ones demonstrably aren't, the argument makes itself.
 </p>

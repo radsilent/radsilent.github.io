@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Decomposition Is Where Requirements Go Wrong — Matthew Collaro</title>
+<title>Decomposition Is Where Requirements Go Wrong, Matthew Collaro</title>
 <meta name="description" content="Most requirement defects are introduced during decomposition and allocation, not authoring. Matthew Collaro on budget conservation, derived requirements, and the sufficiency problem." />
 <meta name="robots" content="index,follow,max-image-preview:large" />
 <link rel="canonical" href="https://radsilent.github.io/articles/requirements-decomposition-and-allocation.html" />
@@ -50,7 +50,7 @@
 <p>
   That effort is not misplaced, but it targets the wrong stage. In my experience the
   defects that actually hurt programs are not badly written requirements. They're
-  well-written requirements that were decomposed incorrectly — and decomposition receives
+  well-written requirements that were decomposed incorrectly, and decomposition receives
   a fraction of the scrutiny, because the children individually pass every authoring
   check.
 </p>
@@ -65,7 +65,7 @@
 
 <p>
   This is not verified on most programs. What is verified is that every child traces to a
-  parent — the direction that's easy to check, since it's a property of each individual
+  parent: the direction that's easy to check, since it's a property of each individual
   link. Sufficiency is a property of the <em>set</em>, and sets are harder. You cannot
   look at one child and tell whether the group is complete. You have to reason about
   whether anything is missing, and "is anything missing" is a judgment that no
@@ -74,7 +74,7 @@
 
 <p>
   So the common failure is a parent requirement decomposed into four children that are
-  each individually correct, each traceable, each verifiable — and that collectively miss
+  each individually correct, each traceable, each verifiable, and that collectively miss
   a case. All four children pass verification. The parent is marked satisfied by
   inference. The gap surfaces during integration, or in the field.
 </p>
@@ -82,7 +82,7 @@
 <p>
   The mitigation isn't automation, because sufficiency isn't computable in general. It's
   making the obligation explicit at decomposition time: recording, alongside the
-  decomposition, the argument for why these children are sufficient. Not a formal proof —
+  decomposition, the argument for why these children are sufficient. Not a formal proof, 
   a sentence or two of rationale that a reviewer can attack. Most decompositions have
   such an argument in the author's head. Almost none write it down, and once it isn't
   written down there is nothing for review to engage with, so review defaults to checking
@@ -93,7 +93,7 @@
 
 <p>
   Quantitative decomposition has a cleaner failure mode and a more tractable fix. When a
-  top-level budget — mass, power, latency, bandwidth, thermal — is allocated across
+  top-level budget, mass, power, latency, bandwidth, thermal, is allocated across
   subsystems, the children should sum within the parent.
 </p>
 
@@ -117,8 +117,8 @@
   This one is fully automatable, and it's the highest-return check I know of in
   requirements management. If allocations are structured data rather than numbers embedded
   in requirement prose, conservation is a query that runs on every change. The obstacle is
-  almost always that the allocation lives inside a sentence — "The sensor module shall
-  consume no more than 14 W" — where it's invisible to any tool. Extracting quantities
+  almost always that the allocation lives inside a sentence, "The sensor module shall
+  consume no more than 14 W", where it's invisible to any tool. Extracting quantities
   into typed attributes is unglamorous data modeling that pays for itself the first time
   it catches a drift.
 </p>
@@ -152,7 +152,7 @@
 
 <p>
   A subtler failure: allocating a requirement to an organizational unit rather than to an
-  architectural element. "The avionics team shall ensure..." — which feels natural,
+  architectural element. "The avionics team shall ensure...", which feels natural,
   because allocation often happens in the same conversation as work assignment.
 </p>
 
@@ -160,7 +160,7 @@
   It breaks traceability in a specific way. Teams reorganize. Scope moves. When the team
   is dissolved or renamed, the allocation points at nothing, and the requirement is
   orphaned without any structural signal that it has been. Allocating to elements means
-  the link survives reorganization, and responsibility is derived from element ownership —
+  the link survives reorganization, and responsibility is derived from element ownership, 
   a mapping that can change without touching the requirement at all.
 </p>
 

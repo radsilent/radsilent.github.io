@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Continuous Verification for System Models — Matthew Collaro</title>
+<title>Continuous Verification for System Models, Matthew Collaro</title>
 <meta name="description" content="Verification is treated as a phase, run against a baseline that has already moved. Matthew Collaro on what it takes to run verification continuously against the current state of a system model." />
 <meta name="robots" content="index,follow,max-image-preview:large" />
 <link rel="canonical" href="https://radsilent.github.io/articles/continuous-verification.html" />
@@ -43,7 +43,7 @@
 
 <p>
   Software engineering went through this transition already. There was a time when
-  integration was a phase — you developed in isolation for months, then entered an
+  integration was a phase: you developed in isolation for months, then entered an
   integration period whose duration nobody could predict, because the defects you were
   about to discover had been accumulating invisibly the entire time. Continuous
   integration didn't make those defects less likely. It made them surface within minutes
@@ -69,7 +69,7 @@
 <p>
   But it conflates two things. Verification that a system meets its requirements does
   require the system. Verification that the <em>engineering artifacts are internally
-  consistent</em> requires only the artifacts — and that second category is where a
+  consistent</em> requires only the artifacts, and that second category is where a
   startling share of program defects actually originate. Not "the actuator failed to meet
   its response time," but "the response time requirement was allocated to two components
   with contradictory budgets, and nobody noticed for five months."
@@ -97,7 +97,7 @@
 
 <p>
   <strong>Budget conservation.</strong> Where a top-level quantity is decomposed across
-  subsystems — mass, power, latency, bandwidth, thermal dissipation — the children should
+  subsystems, mass, power, latency, bandwidth, thermal dissipation, the children should
   sum within the parent's allocation. This is arithmetic. It is almost never automated,
   and it is very often violated, because each subsystem owner negotiates their allocation
   independently and no single person recomputes the total after every negotiation.
@@ -125,7 +125,7 @@
   automatically, the model has to be machine-readable, the requirements have to be
   machine-readable, the links between them have to be typed, and all three have to live
   somewhere a pipeline can reach without a human exporting anything. On a lot of programs
-  at least one of those is false — the requirements are in a database that exports to
+  at least one of those is false, the requirements are in a database that exports to
   Word, or the model lives in a repository behind a desktop client with no usable API, or
   the trace links exist only in a spreadsheet.
 </p>
@@ -159,7 +159,7 @@
 </p>
 
 <p>
-  The approach that works is the one static analysis tools converged on — baseline the
+  The approach that works is the one static analysis tools converged on, baseline the
   existing violations, and gate only on new ones. The program starts with a known debt,
   the debt is visible and quantified, and the pipeline's job is to prevent it from
   growing. Paying it down becomes a separate, schedulable activity rather than a
@@ -178,7 +178,7 @@
 
 <p>
   When this works, the milestone review stops being the moment defects are discovered and
-  becomes the moment decisions are made — which is what it was always supposed to be. The
+  becomes the moment decisions are made, which is what it was always supposed to be. The
   consistency questions have already been answered by machines. The humans in the room
   get to spend their time on the judgment calls that actually require them.
 </p>
