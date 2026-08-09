@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Continuous Verification for System Models, Matthew Collaro</title>
+<meta name="description" content="Verification is treated as a phase, run against a baseline that has already moved. Matthew Collaro on what it takes to run verification continuously against the current state of a system model." />
+<meta name="robots" content="index,follow,max-image-preview:large" />
+<link rel="canonical" href="https://radsilent.github.io/articles/continuous-verification.html" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Continuous Verification for System Models" />
+<meta property="og:description" content="What it takes to run verification continuously against the current state of a system model, rather than as a phase against a stale baseline." />
+<meta property="og:url" content="https://radsilent.github.io/articles/continuous-verification.html" />
+<link rel="stylesheet" href="../style.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Continuous Verification for System Models",
+  "description": "What it takes to run verification continuously against the current state of a system model, rather than as a phase against a stale baseline.",
+  "author": {
+    "@type": "Person",
+    "@id": "https://radsilent.github.io/#matthew-collaro",
+    "name": "Matthew Collaro",
+    "url": "https://radsilent.github.io/"
+  },
+  "mainEntityOfPage": "https://radsilent.github.io/articles/continuous-verification.html",
+  "datePublished": "2026-07-24",
+  "inLanguage": "en"
+}
+</script>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="crumb"><a href="../">Matthew Collaro</a></p>
+  <h1>Continuous Verification for System Models</h1>
+  <p class="tagline">Software solved this thirty years ago. Systems engineering hasn't adopted the lesson.</p>
+</header>
+
+<main>
+<article>
+
+<p>
+  Software engineering went through this transition already. There was a time when
+  integration was a phase: you developed in isolation for months, then entered an
+  integration period whose duration nobody could predict, because the defects you were
+  about to discover had been accumulating invisibly the entire time. Continuous
+  integration didn't make those defects less likely. It made them surface within minutes
+  of introduction, when the person who caused them still remembered what they were doing.
+</p>
+
+<p>
+  Systems engineering has not made this transition. Verification is still a phase. It
+  runs against a baseline, the baseline is established at a milestone, and by the time
+  verification results come back, the design has moved. We are still doing big-bang
+  integration, and we are still surprised by the results.
+</p>
+
+<h2>What "continuous" can and cannot mean here</h2>
+
+<p>
+  An immediate objection: you can't continuously verify a physical system. Qualification
+  testing takes weeks, environmental testing requires hardware that doesn't exist yet,
+  and no amount of CI enthusiasm changes the lead time on a test article. That objection
+  is correct, and any honest proposal has to concede it.
+</p>
+
+<p>
+  But it conflates two things. Verification that a system meets its requirements does
+  require the system. Verification that the <em>engineering artifacts are internally
+  consistent</em> requires only the artifacts, and that second category is where a
+  startling share of program defects actually originate. Not "the actuator failed to meet
+  its response time," but "the response time requirement was allocated to two components
+  with contradictory budgets, and nobody noticed for five months."
+</p>
+
+<p>
+  That second class is fully checkable, today, without hardware, in seconds. It is
+  currently checked by humans reading documents at scheduled reviews.
+</p>
+
+<h2>The checks worth running</h2>
+
+<p>
+  Most of what's valuable is unglamorous. In rough order of return on effort:
+</p>
+
+<p>
+  <strong>Structural completeness.</strong> Every leaf requirement has at least one
+  satisfying element. Every satisfying element exists in the current model. Every
+  requirement with a satisfy relationship also has a verify relationship. Every interface
+  has both a provider and a consumer. These are graph queries. They take milliseconds and
+  they catch the gaps that otherwise surface at a design review, where the cost of
+  discovery is a room full of senior engineers.
+</p>
+
+<p>
+  <strong>Budget conservation.</strong> Where a top-level quantity is decomposed across
+  subsystems, mass, power, latency, bandwidth, thermal dissipation, the children should
+  sum within the parent's allocation. This is arithmetic. It is almost never automated,
+  and it is very often violated, because each subsystem owner negotiates their allocation
+  independently and no single person recomputes the total after every negotiation.
+</p>
+
+<p>
+  <strong>Interface consistency.</strong> A signal produced by one component and consumed
+  by another should agree on type, units, range, and update rate at both ends. Unit
+  mismatches in particular are both notorious and trivially detectable, provided units
+  are modeled as data rather than written into a description field as prose.
+</p>
+
+<p>
+  <strong>Staleness.</strong> When a requirement's text changes, every trace link
+  touching it becomes suspect until re-reviewed. This one is often resisted, because it
+  generates work. That resistance is worth examining honestly: the work exists either
+  way. The only question is whether it's done incrementally as changes occur, or
+  discovered in bulk at a milestone.
+</p>
+
+<h2>Why it isn't already standard</h2>
+
+<p>
+  The technical barrier is real but not the main one. To run any of these checks
+  automatically, the model has to be machine-readable, the requirements have to be
+  machine-readable, the links between them have to be typed, and all three have to live
+  somewhere a pipeline can reach without a human exporting anything. On a lot of programs
+  at least one of those is false, the requirements are in a database that exports to
+  Word, or the model lives in a repository behind a desktop client with no usable API, or
+  the trace links exist only in a spreadsheet.
+</p>
+
+<p>
+  So the first real work is plumbing, and plumbing is hard to fund because it produces no
+  visible artifact. There is no slide that shows the value of an ingestion pipeline.
+</p>
+
+<p>
+  The second barrier is cultural, and larger. Continuous verification produces a
+  continuous stream of findings, and on a program where reviews are formal events with
+  formal outcomes, a stream of findings is uncomfortable. It makes visible a defect rate
+  that was always present but previously only sampled at milestones. I've seen teams
+  react to the first run of an automated consistency check by questioning the check,
+  which is the natural response to being told your model has four hundred inconsistencies
+  when the last review found six.
+</p>
+
+<p>
+  The four hundred were always there. The review found six because a human read a subset
+  of the documents for a few hours. That is the actual comparison, and it's worth stating
+  plainly when the objection comes up.
+</p>
+
+<h2>Making the output survivable</h2>
+
+<p>
+  Which raises the practical design problem: a check that reports four hundred findings
+  on first run will be switched off. Any deployment has to handle this deliberately.
+</p>
+
+<p>
+  The approach that works is the one static analysis tools converged on, baseline the
+  existing violations, and gate only on new ones. The program starts with a known debt,
+  the debt is visible and quantified, and the pipeline's job is to prevent it from
+  growing. Paying it down becomes a separate, schedulable activity rather than a
+  precondition for turning the tooling on at all.
+</p>
+
+<p>
+  It also matters enormously that findings are precise. "Model has inconsistencies" is
+  noise. "Requirement PWR-114 allocates 40 W to the sensor module; the module's three
+  children allocate 46 W total; the discrepancy was introduced in revision 87 when
+  SENS-3's allocation increased from 8 W to 14 W" is actionable, and it's the kind of
+  output a versioned graph can produce and a document export cannot.
+</p>
+
+<h2>What changes</h2>
+
+<p>
+  When this works, the milestone review stops being the moment defects are discovered and
+  becomes the moment decisions are made, which is what it was always supposed to be. The
+  consistency questions have already been answered by machines. The humans in the room
+  get to spend their time on the judgment calls that actually require them.
+</p>
+
+<p>
+  That's the argument. It isn't that automated checking is clever. It's that we are
+  currently using some of the most expensive engineering hours available to perform
+  arithmetic and cross-referencing, at a rate of once per quarter, and calling the result
+  assurance.
+</p>
+
+<p class="muted">
+  Related: <a href="traceability-as-a-byproduct.html">traceability as a byproduct</a> and
+  <a href="mbse-tool-integration.html">the tool integration problem</a>.
+</p>
+
+</article>
+</main>
+
+<footer>
+  <p><a href="../">&larr; Back</a> &middot; &copy; 2026 Matthew Collaro</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Safety Analysis Belongs in the Model, Matthew Collaro</title>
+<meta name="description" content="Hazard analysis is usually performed against a transcription of the architecture, in a separate tool, by a separate team. Matthew Collaro on integrating safety analysis into the system model." />
+<meta name="robots" content="index,follow,max-image-preview:large" />
+<link rel="canonical" href="https://radsilent.github.io/articles/model-based-safety-analysis.html" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Safety Analysis Belongs in the Model" />
+<meta property="og:description" content="Why hazard analysis performed against a transcription of the architecture drifts, and what integration changes." />
+<meta property="og:url" content="https://radsilent.github.io/articles/model-based-safety-analysis.html" />
+<link rel="stylesheet" href="../style.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Safety Analysis Belongs in the Model",
+  "description": "Why hazard analysis performed against a transcription of the architecture drifts, and what integration changes.",
+  "author": {
+    "@type": "Person",
+    "@id": "https://radsilent.github.io/#matthew-collaro",
+    "name": "Matthew Collaro",
+    "url": "https://radsilent.github.io/"
+  },
+  "mainEntityOfPage": "https://radsilent.github.io/articles/model-based-safety-analysis.html",
+  "datePublished": "2026-07-24",
+  "inLanguage": "en"
+}
+</script>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="crumb"><a href="../">Matthew Collaro</a></p>
+  <h1>Safety Analysis Belongs in the Model</h1>
+  <p class="tagline">Analyzing a transcription of the architecture guarantees the analysis drifts from the design.</p>
+</header>
+
+<main>
+<article>
+
+<p>
+  On most programs, safety analysis is performed by a separate team, in separate tools,
+  against a separate representation of the system. The safety engineers read the design
+  documentation, build their own model of the architecture: a fault tree, an FMEA
+  worksheet, a hazard log, and analyze that.
+</p>
+
+<p>
+  This is a transcription, and transcriptions have one guaranteed property: they diverge
+  from the source. The design changes weekly. The safety representation is rebuilt at
+  milestones. In between, the analysis describes a system that no longer exists, and
+  nobody can easily say by how much.
+</p>
+
+<h2>The divergence isn't detectable</h2>
+
+<p>
+  What makes this particularly awkward is that the drift is invisible. If a component is
+  added to the architecture, nothing in the fault tree signals its absence. The fault tree
+  remains internally consistent, computes a number, and produces a result that looks
+  exactly as authoritative as it would if it were current.
+</p>
+
+<p>
+  So the question "is this analysis valid for the current design" has no cheap answer. It
+  requires a human to compare two representations element by element, expensive enough
+  that it happens at milestones, which means the answer is only known at the moments when
+  the analysis was being redone anyway.
+</p>
+
+<p>
+  Compare this to a structural inconsistency in a model, which a checker finds in
+  milliseconds. The difference isn't that safety analysis is intrinsically harder. It's
+  that the analysis lives in an artifact with no link to the thing it describes.
+</p>
+
+<h2>What integration means concretely</h2>
+
+<p>
+  Integrating safety analysis into the model doesn't mean doing fault tree analysis inside
+  a SysML tool. It means the analysis references architectural elements by identity rather
+  than by name, so the relationship is machine-checkable.
+</p>
+
+<p>
+  A basic event in a fault tree corresponds to a failure mode of a specific component. If
+  that correspondence is a typed link to the component in the system model, rather than a
+  text label that happens to match, then several things follow immediately. When the
+  component is removed, the basic event referencing it is flagged. When a component is
+  added with no corresponding failure modes, the coverage gap is detectable. When the
+  connection topology changes, the propagation paths the analysis assumed can be
+  re-derived and compared against what it assumed.
+</p>
+
+<p>
+  None of this automates the analysis. Deciding which failure modes matter, what their
+  effects are, and how severe they are is engineering judgment that will not be
+  automated. What's automated is the bookkeeping question of whether the judgment was
+  applied to the current system, which is the question that actually goes stale.
+</p>
+
+<h2>Failure propagation follows the interfaces</h2>
+
+<p>
+  The most useful structural link is between safety analysis and the interface model.
+  Failures propagate along connections. If component A produces a signal consumed by
+  component B, then a failure mode of A that corrupts that signal is a candidate cause of
+  a failure of B.
+</p>
+
+<p>
+  Candidate, not certainty: B may detect and reject the corrupted value, which is
+  precisely the kind of mitigation safety analysis exists to reason about. But the
+  candidate set is derivable from the topology, and deriving it mechanically catches the
+  propagation paths a human working from documentation misses. On a system with hundreds
+  of components and thousands of signals, exhaustive manual enumeration of propagation
+  paths is not achievable, and everyone involved knows it. What happens instead is that
+  experienced engineers apply intuition about which paths matter, which is generally good
+  and occasionally misses something that intuition had no reason to flag.
+</p>
+
+<p>
+  Mechanical derivation from the topology doesn't replace that judgment. It bounds the
+  space the judgment is applied to, and it makes the coverage claim checkable rather than
+  asserted.
+</p>
+
+<h2>Certification and the evidence problem</h2>
+
+<p>
+  There's a second argument, and on certified programs it may be the stronger one.
+  Certification requires demonstrating not just that the analysis was performed but that
+  it was performed against the design being certified, and that everything it depends on
+  is consistent.
+</p>
+
+<p>
+  Assembling that evidence from documents is a substantial effort in itself, largely
+  spent establishing correspondences that could have been maintained continuously at near
+  zero marginal cost. When the analysis links to model elements by identity, the evidence
+  package becomes a query: here is every hazard, the requirements mitigating it, the
+  elements implementing those requirements, the tests verifying them, and the
+  configuration each test ran against.
+</p>
+
+<p>
+  That's the same graph the traceability work needs. Safety analysis is not a separate
+  problem from requirements traceability; it's the same relational structure with
+  additional node and edge types.
+</p>
+
+<h2>The organizational obstacle</h2>
+
+<p>
+  The barrier is rarely technical. Safety is frequently an independent organization, 
+  deliberately, and for good reason, since independence from design pressure is part of
+  what makes the assessment credible.
+</p>
+
+<p>
+  Integration is easily perceived as a threat to that independence. If safety analysis
+  lives in the same model the designers control, does it remain independent? It's a fair
+  question and it deserves a real answer rather than dismissal.
+</p>
+
+<p>
+  The answer I'd give is that independence is about who makes the judgments and who can
+  overrule them, not about which database the artifacts sit in. Safety engineers keep
+  ownership of hazard identification, severity classification, and adequacy of mitigation.
+  What they give up is the obligation to manually maintain a private copy of the
+  architecture, which was never a source of independence, only of cost and drift.
+</p>
+
+<p>
+  Making that distinction explicit, early, is in my experience the difference between an
+  integration effort that proceeds and one that stalls in a governance discussion for a
+  year.
+</p>
+
+<p class="muted">
+  Related: <a href="model-based-interface-control.html">model-based interface control</a>
+  and <a href="engineering-knowledge-graphs.html">engineering data as a graph</a>.
+</p>
+
+</article>
+</main>
+
+<footer>
+  <p><a href="../">&larr; Back</a> &middot; &copy; 2026 Matthew Collaro</p>
+</footer>
+
+</body>
+</html>

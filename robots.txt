@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://radsilent.github.io/sitemap.xml
+Sitemap: https://radsilent.github.io/matthew-collaro/sitemap.xml

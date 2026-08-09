@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Engineering Data Is a Graph, Matthew Collaro</title>
+<meta name="description" content="Requirements, architecture, parts, and tests form a relational structure stored as documents. Matthew Collaro on modeling engineering data as a versioned graph and what it makes possible." />
+<meta name="robots" content="index,follow,max-image-preview:large" />
+<link rel="canonical" href="https://radsilent.github.io/articles/engineering-knowledge-graphs.html" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Engineering Data Is a Graph" />
+<meta property="og:description" content="On modeling engineering data as a versioned graph, and what change propagation requires." />
+<meta property="og:url" content="https://radsilent.github.io/articles/engineering-knowledge-graphs.html" />
+<link rel="stylesheet" href="../style.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Engineering Data Is a Graph",
+  "description": "On modeling engineering data as a versioned graph, and what change propagation requires.",
+  "author": {
+    "@type": "Person",
+    "@id": "https://radsilent.github.io/#matthew-collaro",
+    "name": "Matthew Collaro",
+    "url": "https://radsilent.github.io/"
+  },
+  "mainEntityOfPage": "https://radsilent.github.io/articles/engineering-knowledge-graphs.html",
+  "datePublished": "2026-07-24",
+  "inLanguage": "en"
+}
+</script>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="crumb"><a href="../">Matthew Collaro</a></p>
+  <h1>Engineering Data Is a Graph</h1>
+  <p class="tagline">We store a relational structure as documents, then wonder why the questions are hard.</p>
+</header>
+
+<main>
+<article>
+
+<p>
+  A requirement is satisfied by an architectural element. That element is realized by a
+  part. The part is procured under a specification and verified by a test. The test was
+  executed against a configuration, which was baselined at a milestone, which approved a
+  set of changes, each of which modified some requirements.
+</p>
+
+<p>
+  That is a graph. Nodes are engineering objects; edges are typed, directional
+  relationships. And on most programs it is stored as a set of documents, in different
+  tools, with the edges recorded as text references that no machine can follow.
+</p>
+
+<p>
+  The consequence is that ordinary questions become expensive. Not exotic questions, 
+  ordinary ones. What is affected if this requirement changes? Which requirements are
+  unverified? Which parts are involved in satisfying this safety requirement? Each is a
+  traversal, and each currently requires an engineer to spend a day cross-referencing
+  exports.
+</p>
+
+<h2>Why documents lose</h2>
+
+<p>
+  A document can express a relationship, "this requirement is satisfied by the power
+  distribution module", but only as prose. To follow it, something must resolve the
+  phrase to an object. A human does this using context. A machine cannot, reliably,
+  because the same module appears as "PDM," "power distribution," "the PDU," and
+  "P/N 4471-002" across four documents written by three teams.
+</p>
+
+<p>
+  This is why traceability matrices exist: they're an attempt to extract the graph from
+  the documents into a form that can be queried. But a matrix is a flattened projection.
+  It captures one relationship type between two object types, loses everything else, and
+  goes stale the moment either side changes: the graph reconstituted badly, once,
+  manually.
+</p>
+
+<h2>Typed edges are the whole point</h2>
+
+<p>
+  A generic "related to" edge is nearly worthless. The value comes from types that carry
+  meaning, because meaning is what makes a query answerable.
+</p>
+
+<p>
+  <em>Satisfies</em> means an element implements a requirement, which implies obligations:
+  if the requirement changes, the element may no longer satisfy it. <em>Derives from</em>
+  means a requirement was decomposed from a parent, which implies that the children must
+  collectively be sufficient. <em>Verifies</em> means a test demonstrates satisfaction,
+  which implies a currency question, was the test run against a version of the design
+  that still resembles this one?
+</p>
+
+<p>
+  With those types, the query "which requirements have a satisfies edge but no verifies
+  edge" is one line and answers the most important question in verification planning.
+  Without them, it's a week of spreadsheet work and the answer is out of date on arrival.
+</p>
+
+<h2>Versioning is not optional</h2>
+
+<p>
+  A graph of the current state answers questions about now. Most of the questions that
+  matter are about change.
+</p>
+
+<p>
+  What changed since the last baseline. Which links became suspect as a result. Whether
+  this test result is still valid given the design has moved. Which decisions were made
+  under assumptions that no longer hold. None of these are answerable from a snapshot, 
+  they need history, and specifically they need the ability to compare two states of the
+  graph and characterize the difference in engineering terms rather than as a textual
+  diff.
+</p>
+
+<p>
+  That "in engineering terms" qualifier does a lot of work. Anyone can diff two exports.
+  The useful statement isn't "these 340 lines differ" but "requirement PWR-114's
+  allocation changed, which invalidates the satisfy link to the sensor module, which
+  means test TC-2201 no longer verifies the current requirement": a derived consequence,
+  computed by propagating the change along typed edges and applying the rules those types
+  imply.
+</p>
+
+<h2>Change propagation as reachability</h2>
+
+<p>
+  Once you have typed edges and versions, impact analysis becomes a reachability problem.
+  Start at the changed node, walk edges whose semantics imply dependency, mark what you
+  reach as potentially affected.
+</p>
+
+<p>
+  The naïve version fails immediately: everything is transitively connected to everything,
+  so a change to a top-level requirement marks the entire program as affected, which is
+  true and useless. Making it useful requires the propagation rules to be type-aware and
+  to attenuate. A change to a requirement's text propagates strongly to elements that
+  satisfy it. A change to an element's internal structure may not propagate to the
+  requirement at all. A change to a test propagates to the verification status of what it
+  verifies, but not back into the design.
+</p>
+
+<p>
+  Getting these rules right is the substance of the problem. Too permissive and every
+  change floods the program with false impact, and people stop reading the reports. Too
+  restrictive and real impacts are missed, which is worse, because now there's a tool
+  people trust that's wrong. I don't think there's a universal rule set, the tuning is
+  domain-specific and it's earned through calibration against real change histories on a
+  real program.
+</p>
+
+<h2>The ontology question</h2>
+
+<p>
+  All of this presumes agreement on what the node and edge types are, which is an
+  ontology, and ontology work has a reputation for consuming years and producing
+  taxonomies nobody uses.
+</p>
+
+<p>
+  The reputation is partly earned, and the failure mode is recognizable: modeling the
+  domain in full generality before anyone has tried to answer a question with it. What
+  works better is starting from the queries. Pick the ten questions the program actually
+  needs answered, determine the minimum type system that answers them, and extend only
+  when a new question demands it. The ontology stays small, every type earns its
+  existence, and the thing is useful from the first week rather than the third year.
+</p>
+
+<h2>What it buys</h2>
+
+<p>
+  When it works, the shift is from questions that take days to questions that take
+  seconds, which changes which questions get asked. Nobody runs an impact analysis that
+  costs a week unless the change is large. If it costs a second, you run it on every
+  change, and the small changes are precisely the ones whose consequences get missed.
+</p>
+
+<p>
+  That's the underlying argument for treating engineering data as what it structurally is.
+  Not elegance. The cost of asking a question determines how often it's asked, and how
+  often it's asked determines what the program knows about itself.
+</p>
+
+<p class="muted">
+  Related: <a href="traceability-as-a-byproduct.html">traceability as a byproduct</a> and
+  <a href="mbse-tool-integration.html">the tool integration problem</a>.
+</p>
+
+</article>
+</main>
+
+<footer>
+  <p><a href="../">&larr; Back</a> &middot; &copy; 2026 Matthew Collaro</p>
+</footer>
+
+</body>
+</html>

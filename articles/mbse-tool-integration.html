@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The MBSE Tool Integration Problem, Matthew Collaro</title>
+<meta name="description" content="Every MBSE deployment eventually becomes an integration project. Matthew Collaro on why round-trip synchronization between requirements, model, and PLM tools keeps failing, and what actually holds up." />
+<meta name="robots" content="index,follow,max-image-preview:large" />
+<link rel="canonical" href="https://radsilent.github.io/articles/mbse-tool-integration.html" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="The MBSE Tool Integration Problem" />
+<meta property="og:description" content="Why round-trip synchronization between requirements, model, and PLM tools keeps failing, and what actually holds up." />
+<meta property="og:url" content="https://radsilent.github.io/articles/mbse-tool-integration.html" />
+<link rel="stylesheet" href="../style.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "The MBSE Tool Integration Problem",
+  "description": "Why round-trip synchronization between requirements, model, and PLM tools keeps failing, and what actually holds up.",
+  "author": {
+    "@type": "Person",
+    "@id": "https://radsilent.github.io/#matthew-collaro",
+    "name": "Matthew Collaro",
+    "url": "https://radsilent.github.io/"
+  },
+  "mainEntityOfPage": "https://radsilent.github.io/articles/mbse-tool-integration.html",
+  "datePublished": "2026-07-24",
+  "inLanguage": "en"
+}
+</script>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="crumb"><a href="../">Matthew Collaro</a></p>
+  <h1>The MBSE Tool Integration Problem</h1>
+  <p class="tagline">Why round-trip synchronization keeps failing, and what survives contact with a real program.</p>
+</header>
+
+<main>
+<article>
+
+<p>
+  Every model-based systems engineering deployment I've been part of eventually stopped
+  being a modeling project and became an integration project. Not because anyone planned
+  it that way. Because the model is only useful in proportion to how well it's connected
+  to everything else, and everything else lives in tools that were not designed to be
+  connected.
+</p>
+
+<p>
+  The typical landscape: requirements in DOORS or Jama. Architecture in Cameo or
+  MagicDraw. Geometry in CATIA. Analysis in MATLAB or Ansys. Parts and configuration in
+  Teamcenter, Enovia, or Windchill. Test management somewhere else again. Each of these
+  is a competent tool with a real user base, and each maintains its own notion of what an
+  identifier is, what a version is, and what it means for two things to be the same
+  thing.
+</p>
+
+<h2>Round-trip is where it breaks</h2>
+
+<p>
+  One-directional export is straightforward and mostly solved. You can get requirements
+  out of a requirements tool and into a model. The trouble starts when both sides can
+  change and the changes must reconcile.
+</p>
+
+<p>
+  Consider the specific case of requirements imported into a modeling tool. The import
+  creates model elements corresponding to requirements. An engineer works in the model
+  and, in the course of that work, refines a requirement's wording: legitimately, as
+  part of the engineering. Meanwhile the requirements owner edits the same requirement in
+  the source tool. Now there are two versions, and the synchronization logic has to
+  decide what happened.
+</p>
+
+<p>
+  It usually can't, because it doesn't have the information. The two tools have recorded
+  "the text is different." Neither recorded intent. Was the model-side edit a refinement
+  that should propagate back, or a local annotation that should be discarded? The
+  synchronizer can't tell, so it picks a policy: source wins, or last-write wins, or
+  flag-for-manual-review. All three are wrong often enough to erode trust, and once
+  engineers stop trusting the sync, they start keeping private copies, which is the exact
+  fragmentation the deployment existed to eliminate.
+</p>
+
+<h2>Identity is the actual problem</h2>
+
+<p>
+  Underneath the merge question is a harder one: what makes two things the same thing
+  across tools?
+</p>
+
+<p>
+  Naïvely, an identifier. In practice identifiers are unstable in ways that surprise
+  people. Requirements get renumbered during reorganization. Model elements get new
+  internal IDs when copied between projects, a routine operation when a program forks a
+  baseline for a variant. Part numbers change at release. Every one of these silently
+  breaks a link that was correct.
+</p>
+
+<p>
+  The mitigation is to maintain identity as a first-class concern rather than inheriting
+  it from whichever tool the object came from: a stable internal identifier for each
+  engineering object, mapped to whatever the source tool currently calls it, with that
+  mapping versioned. Then a renumbering in DOORS is a change to the mapping rather than
+  the loss of every link. This sounds obvious written down. It's rarely done, because it
+  requires a layer that owns identity, and adding one means admitting that no existing
+  tool in the chain can be the system of record for identity, a politically expensive
+  thing to say out loud on a large program.
+</p>
+
+<h2>Semantic mismatch between tools</h2>
+
+<p>
+  Beyond identity, the tools disagree about meaning. A "requirement" in a requirements
+  management tool is a text object with attributes, a hierarchy position, and a status. A
+  requirement in SysML is a stereotyped model element participating in typed
+  relationships. These are not the same concept, and mapping between them loses
+  information in both directions.
+</p>
+
+<p>
+  The same applies to structure. A PLM system's product structure is an assembly
+  hierarchy oriented toward manufacture and configuration control. A SysML block
+  decomposition is a functional or logical hierarchy. They are frequently, deliberately
+  different, a logical function may be realized by parts in three different assemblies.
+  Integration efforts that assume these hierarchies should correspond produce a mapping
+  that fights the engineering rather than supporting it.
+</p>
+
+<p>
+  The workable posture is to stop trying to make the hierarchies agree and instead model
+  the relationship between them explicitly: this logical element is realized by these
+  physical parts, as a typed, queryable relation. That's more work upfront and it's the
+  only version I've seen survive contact with a real program.
+</p>
+
+<h2>Why point-to-point integration collapses</h2>
+
+<p>
+  The instinct is to build connectors: requirements-to-model, model-to-PLM, model-to-
+  analysis. Each is tractable in isolation. The problem is the count, with n tools you
+  are on a path toward n² connectors, each with its own identity mapping, its own merge
+  policy, and its own failure modes. In practice programs build four or five, then stop,
+  and the remaining tools stay islands, connected by people exporting spreadsheets.
+</p>
+
+<p>
+  The alternative is a hub: one canonical representation that every tool maps into and
+  out of, so each tool needs one adapter rather than one per peer. This is not a new
+  idea. It's how enterprise integration went, and how the OSLC effort framed the problem.
+  The reason it hasn't won in this domain isn't conceptual, it's that defining the
+  canonical representation requires deciding, across organizational boundaries, what a
+  requirement is and what identity means, and no single team has the authority to make
+  those decisions stick.
+</p>
+
+<h2>Graph, not document</h2>
+
+<p>
+  If there is a hub, the shape it should take is a graph. Engineering data is natively
+  relational: this requirement is satisfied by this element, which is realized by this
+  part, which is verified by this test, which was executed in this configuration. Those
+  are edges. Storing them as documents means every query becomes a search problem instead
+  of a traversal, and the questions that matter most are traversals: what's affected if
+  this changes, what's unverified, what depends on this interface.
+</p>
+
+<p>
+  Adding versioning to the graph gets you the rest of the way, the ability to compare
+  states and answer what changed, which is the question the merge problem needed answered
+  and couldn't ask.
+</p>
+
+<h2>What I'd tell someone starting one of these</h2>
+
+<p>
+  Decide who owns identity before writing a single connector; retrofitting an identity
+  layer means re-deriving every link. Pick one direction and make it excellent rather
+  than making bidirectional sync mediocre everywhere. Version everything from the
+  beginning, because you cannot reconstruct history you didn't record. And expect that
+  the hard problems will be organizational rather than technical, the format
+  negotiations are tractable; getting two departments to agree on what a requirement is
+  is the part that takes a year.
+</p>
+
+<p class="muted">
+  Related: <a href="engineering-knowledge-graphs.html">engineering data as a graph</a>
+  and <a href="traceability-as-a-byproduct.html">traceability as a byproduct</a>.
+</p>
+
+</article>
+</main>
+
+<footer>
+  <p><a href="../">&larr; Back</a> &middot; &copy; 2026 Matthew Collaro</p>
+</footer>
+
+</body>
+</html>
